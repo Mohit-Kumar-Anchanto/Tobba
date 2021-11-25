@@ -21,4 +21,13 @@ class ProductController < ApplicationController
     end
   end
 
+  def send_request_to_create_order(order_number, price, queue_name)
+    order_conn = Bunny.new
+    order_conn.start
+    channel = order_conn.create_channel
+    exchanger = channel.default_exchange
+    payload = { number: order_number, price: price}
+    exchanger.publish(payload, :routing_key => queue_name)
+  end
+
 end
