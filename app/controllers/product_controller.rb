@@ -11,34 +11,21 @@ class ProductController < ApplicationController
     Product.find_or_create_by(name: product_name, stock: stock)
   end
 
-  # def start_connection
-  #   bunny_connection = Bunny.new
-  #   bunny_connection.start
-  # end
-
-  # def connect_channel
-  #   channel = bunny_connection.create_channel
-  # end
-
-  def get_payload(queue_name)
-    @bunny_connection.start
-    channel = @bunny_connection.create_channel
-    #channel = connect_channel
-    queue  = channel.queue(queue_name, :auto_delete => true)
-    #ap queue.name
-    queue.subscribe do |delivery_info, metadata, payload|
-      puts "Received #{payload}"
-      create_product(payload)
-    end
+  def get_payload
+    consumer = ConsumerServices.new
+    queue = consumer.declare_queue("CreateProduct")
+    payload = consumer.consume_message(queue)
+    create_product(payload) if payload.present?
+    return false
   end
 
-  def send_request_to_create_order(order_number, price, queue_name)
-    @bunny_connection.start
-    channel = @bunny_connection.create_channel
-    exchanger = channel.default_exchange
+  def send_request_to_create_order(order_number, price)
+    publisher = PublisherServices.new
+    queue = publisher.declare_queue("CreateOrder")
     payload = { number: order_number, price: price}
-    exchanger.publish(payload.to_json, :routing_key => queue_name)
-    @bunny_connection.close
+    payload = payload.to_json
+    publisher.publish_message(payload, queue.name)
+    publisher.close_connection
   end
 
 end
