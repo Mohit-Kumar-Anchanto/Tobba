@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rishav-enigma/Protosphere.git
-  revision: fda291cf364d49af99a0afc14ade8c60073a2ffc
+  revision: 0d670119f4965043f8bfccb16867ece81fcee730
   specs:
     protosphere (0.1.0)
 
