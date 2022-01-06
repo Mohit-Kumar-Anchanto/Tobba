@@ -110,6 +110,7 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.12.5-x86_64-darwin)
       racc (~> 1.4)
+    oj (3.13.10)
     public_suffix (4.0.6)
     puma (5.5.2)
       nio4r (~> 2.0)
@@ -232,6 +233,7 @@ DEPENDENCIES
   jbuilder (~> 2.7)
   listen (~> 3.3)
   mysql2 (~> 0.5)
+  oj
   puma (~> 5.0)
   rabbitmq-service-util
   rack-mini-profiler (~> 2.0)

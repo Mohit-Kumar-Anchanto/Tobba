@@ -5,7 +5,7 @@ class ProductController < ApplicationController
     queue = publisher.declare_queue("CreateOrder")
     payload = { number: order_number, price: price}
     payload = payload.to_json
-    publisher.publish_message(queue.name, payload)
+    publisher.publish_message(queue.name, payload, "mohit_secrets")
     publisher.close_connection
   end
 

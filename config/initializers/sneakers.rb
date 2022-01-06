@@ -2,10 +2,19 @@
 require 'sneakers'
 require 'sneakers/handlers/maxretry'
 
+PL_LOG = Logger.new("#{Rails.root}/log/amazon.log")
+PL_LOG.level = Logger::INFO
+
 
 Sneakers.configure  :heartbeat => 30,
                     :amqp => 'amqp://guest:guest@localhost:5672',
                     :vhost => '/'
+                
+Sneakers::ContentType.register(
+  content_type: 'application/json',
+  deserializer: ->(payload) { Oj.load(payload) },
+  serializer: ->(payload) { Oj.dump(payload) },
+)
                     
 # module Connection
 #   def self.sneakers
